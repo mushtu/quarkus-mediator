@@ -1,0 +1,9 @@
+name: "Quarkus Mediator"
+artifact: "com.tiddev.quarkus:quarkus-mediator:1.0.0-SNAPSHOT"
+metadata:
+  keywords:
+    - "mediator"
+    - "request"
+    - "notification"
+    - "middleware"
+  status: "experimental"

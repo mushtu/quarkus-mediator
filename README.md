@@ -14,7 +14,7 @@ reflective lookup.
 - **No reflection at runtime** — the Quarkus deployment processor generates
   a concrete `Mediator` implementation per scope.
 
-Status: **experimental** (`1.0.1`).
+Status: **experimental** (`1.0.2`).
 
 [![Release](https://jitpack.io/v/mushtu/quarkus-mediator.svg)](https://jitpack.io/#mushtu/quarkus-mediator)
 
@@ -44,7 +44,7 @@ the matching deployment artifact automatically via
 <dependency>
     <groupId>com.github.mushtu.quarkus-mediator</groupId>
     <artifactId>quarkus-mediator</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
@@ -56,7 +56,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.mushtu.quarkus-mediator:quarkus-mediator:1.0.1'
+    implementation 'com.github.mushtu.quarkus-mediator:quarkus-mediator:1.0.2'
 }
 ```
 

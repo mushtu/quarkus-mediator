@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.github.mushtu.quarkus-mediator</groupId>
         <artifactId>quarkus-mediator-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
 
     <artifactId>quarkus-mediator-deployment</artifactId>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>com.github.mushtu.quarkus-mediator</groupId>
             <artifactId>quarkus-mediator</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>

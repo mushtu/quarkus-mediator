@@ -1,4 +1,4 @@
-package com.tiddev.quarkus.example;
+package com.tiddev.quarkus.order;
 
 /**
  * Request payload for creating an order.

@@ -1,9 +1,9 @@
-package com.tiddev.quarkus.example;
+package com.tiddev.quarkus.order;
 
 import com.tiddev.quarkus.mediator.MediatorContext;
-import com.tiddev.quarkus.mediator.MediatorMiddleware;
-import com.tiddev.quarkus.mediator.MediatorNext;
-import com.tiddev.quarkus.mediator.Middleware;
+import com.tiddev.quarkus.mediator.MediatorRequestChain;
+import com.tiddev.quarkus.mediator.MediatorRequestMiddleware;
+import com.tiddev.quarkus.mediator.RequestMiddleware;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.logging.Logger;
@@ -12,15 +12,15 @@ import java.util.logging.Logger;
  * Logs request execution before and after the handler runs.
  */
 @ApplicationScoped
-@Middleware(order = 0)
-public class OrdersMiddleware implements MediatorMiddleware<CreateOrderRequest, CreateOrderResponse> {
+@MediatorRequestMiddleware(order = 0)
+public class OrdersMiddleware implements RequestMiddleware<CreateOrderRequest, CreateOrderResponse> {
 
     private static final Logger LOG = Logger.getLogger(OrdersMiddleware.class.getName());
 
     @Override
-    public CreateOrderResponse handle(MediatorContext<CreateOrderRequest> context, MediatorNext<CreateOrderRequest, CreateOrderResponse> next) {
+    public CreateOrderResponse handle(MediatorContext<CreateOrderRequest> context, MediatorRequestChain<CreateOrderRequest, CreateOrderResponse> chain) {
         LOG.info(() -> "Mediator packages " + context.packages() + " handling " + context.messageType().getSimpleName());
-        CreateOrderResponse result = next.proceed(context.message());
+        CreateOrderResponse result = chain.next(context.message());
         LOG.info(() -> "Mediator packages " + context.packages() + " completed " + context.messageType().getSimpleName());
         return result;
     }

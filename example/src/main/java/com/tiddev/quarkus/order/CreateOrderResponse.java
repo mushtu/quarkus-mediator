@@ -1,4 +1,4 @@
-package com.tiddev.quarkus.example;
+package com.tiddev.quarkus.order;
 
 /**
  * Response payload returned after creating an order.

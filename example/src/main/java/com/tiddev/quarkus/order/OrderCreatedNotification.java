@@ -1,4 +1,4 @@
-package com.tiddev.quarkus.example;
+package com.tiddev.quarkus.order;
 
 /**
  * Notification emitted after an order is created.

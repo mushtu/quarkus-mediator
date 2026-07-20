@@ -7,13 +7,13 @@ package com.tiddev.quarkus.mediator;
  * @param <TResponse> the response type
  */
 @FunctionalInterface
-public interface MediatorMiddleware<TRequest, TResponse> {
+public interface RequestMiddleware<TRequest, TResponse> {
     /**
      * Handles the request and optionally invokes the next step in the chain.
      *
      * @param context the mediator context
-     * @param next the remaining invocation
+     * @param chain the remaining invocation
      * @return the result of the middleware or the underlying handler
      */
-    TResponse handle(MediatorContext<TRequest> context, MediatorNext<TRequest, TResponse> next);
+    TResponse handle(MediatorContext<TRequest> context, MediatorRequestChain<TRequest, TResponse> chain);
 }

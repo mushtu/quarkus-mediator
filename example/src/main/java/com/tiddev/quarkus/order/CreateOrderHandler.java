@@ -1,4 +1,4 @@
-package com.tiddev.quarkus.example;
+package com.tiddev.quarkus.order;
 
 import com.tiddev.quarkus.mediator.MediatorRequestHandler;
 import com.tiddev.quarkus.mediator.RequestHandler;

@@ -7,10 +7,10 @@ import com.tiddev.quarkus.mediator.MediatorException;
 import com.tiddev.quarkus.mediator.MediatorNotificationHandler;
 import com.tiddev.quarkus.mediator.MediatorRequestHandler;
 import com.tiddev.quarkus.mediator.MediatorQualifier;
-import com.tiddev.quarkus.mediator.MediatorNext;
-import com.tiddev.quarkus.mediator.MediatorMiddleware;
-import com.tiddev.quarkus.mediator.Middleware;
+import com.tiddev.quarkus.mediator.MediatorRequestChain;
+import com.tiddev.quarkus.mediator.MediatorRequestMiddleware;
 import com.tiddev.quarkus.mediator.NotificationHandler;
+import com.tiddev.quarkus.mediator.RequestMiddleware;
 import com.tiddev.quarkus.mediator.RequestHandler;
 import io.quarkus.arc.deployment.BeanDefiningAnnotationBuildItem;
 import io.quarkus.arc.deployment.GeneratedBeanBuildItem;
@@ -58,17 +58,16 @@ public class MediatorProcessor {
     private static final DotName MEDIATOR_DEFINITION = DotName.createSimple(MediatorDefinition.class.getName());
     private static final DotName REQUEST_HANDLER = DotName.createSimple(MediatorRequestHandler.class.getName());
     private static final DotName NOTIFICATION_HANDLER = DotName.createSimple(MediatorNotificationHandler.class.getName());
-    private static final DotName MIDDLEWARE = DotName.createSimple(Middleware.class.getName());
+    private static final DotName REQUEST_MIDDLEWARE = DotName.createSimple(MediatorRequestMiddleware.class.getName());
     private static final DotName REQUEST_HANDLER_TYPE = DotName.createSimple(RequestHandler.class.getName());
     private static final DotName NOTIFICATION_HANDLER_TYPE = DotName.createSimple(NotificationHandler.class.getName());
-    private static final DotName REQUEST_MIDDLEWARE_TYPE = DotName.createSimple(MediatorMiddleware.class.getName());
+    private static final DotName REQUEST_MIDDLEWARE_TYPE = DotName.createSimple(RequestMiddleware.class.getName());
 
     private static final MethodDescriptor REQUIRE_NON_NULL = MethodDescriptor.ofMethod(Objects.class, "requireNonNull", Object.class, Object.class, String.class);
     private static final MethodDescriptor OBJECT_GET_CLASS = MethodDescriptor.ofMethod(Object.class, "getClass", Class.class);
     private static final MethodDescriptor REQUEST_HANDLE = MethodDescriptor.ofMethod(RequestHandler.class, "handle", Object.class, Object.class);
     private static final MethodDescriptor NOTIFICATION_HANDLE = MethodDescriptor.ofMethod(NotificationHandler.class, "handle", void.class, Object.class);
-    private static final MethodDescriptor REQUEST_MIDDLEWARE_HANDLE = MethodDescriptor.ofMethod(MediatorMiddleware.class, "handle", Object.class, MediatorContext.class, MediatorNext.class);
-    private static final MethodDescriptor REQUEST_CHAIN_PROCEED = MethodDescriptor.ofMethod(MediatorNext.class, "proceed", Object.class, Object.class);
+    private static final MethodDescriptor REQUEST_MIDDLEWARE_HANDLE = MethodDescriptor.ofMethod(RequestMiddleware.class, "handle", Object.class, MediatorContext.class, MediatorRequestChain.class);
     private static final MethodDescriptor MEDIATOR_CONTEXT_CTOR = MethodDescriptor.ofConstructor(MediatorContext.class, Set.class, Object.class, Class.class);
     private static final MethodDescriptor SET_ADD = MethodDescriptor.ofMethod(Set.class, "add", boolean.class, Object.class);
 
@@ -88,8 +87,8 @@ public class MediatorProcessor {
     }
 
     @BuildStep
-    BeanDefiningAnnotationBuildItem middlewareBean() {
-        return new BeanDefiningAnnotationBuildItem(MIDDLEWARE);
+    BeanDefiningAnnotationBuildItem requestMiddlewareBean() {
+        return new BeanDefiningAnnotationBuildItem(REQUEST_MIDDLEWARE);
     }
 
     @BuildStep
@@ -157,9 +156,9 @@ public class MediatorProcessor {
             }
         }
 
-        for (AnnotationInstance annotation : index.getAnnotations(MIDDLEWARE)) {
+        for (AnnotationInstance annotation : index.getAnnotations(REQUEST_MIDDLEWARE)) {
             ClassInfo classInfo = annotation.target().asClass();
-            validateHandlerClass(classInfo, MIDDLEWARE, REQUEST_MIDDLEWARE_TYPE);
+            validateHandlerClass(classInfo, REQUEST_MIDDLEWARE, REQUEST_MIDDLEWARE_TYPE);
             Class<?> beanClass = loadClass(classInfo.name().toString());
             String requestTypeName = resolveHandlerTypeArgument(classInfo, REQUEST_MIDDLEWARE_TYPE, 0);
             int order = annotation.value("order") == null ? 0 : annotation.value("order").asInt();
@@ -346,7 +345,7 @@ public class MediatorProcessor {
 
         RequestMiddlewareModel middleware = middlewares.get(index);
         ResultHandle middlewareBean = bytecodeCreator.readInstanceField(middleware.field(), self);
-        FunctionCreator chain = bytecodeCreator.createFunction(MediatorNext.class);
+        FunctionCreator chain = bytecodeCreator.createFunction(MediatorRequestChain.class);
         BytecodeCreator chainBytecode = chain.getBytecode();
         ResultHandle nextRequest = chainBytecode.getMethodParam(0);
         emitRequestMiddlewareChain(chainBytecode, scope, requestTypeName, index + 1, nextRequest, context, self, handler);

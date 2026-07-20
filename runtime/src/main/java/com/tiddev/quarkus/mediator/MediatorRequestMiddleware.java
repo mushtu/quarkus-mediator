@@ -7,12 +7,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks a bean as middleware in a mediator pipeline.
+ * Marks a bean as request middleware in a mediator pipeline.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Middleware {
+public @interface MediatorRequestMiddleware {
     /**
      * Returns the middleware order. Lower values run first.
      *

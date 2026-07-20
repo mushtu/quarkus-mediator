@@ -1,5 +1,5 @@
 name: "Quarkus Mediator"
-artifact: "com.tiddev.quarkus:quarkus-mediator:1.0.0-SNAPSHOT"
+artifact: "com.github.mushtu.quarkus-mediator:quarkus-mediator:1.0.0"
 metadata:
   keywords:
     - "mediator"

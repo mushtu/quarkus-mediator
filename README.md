@@ -14,7 +14,9 @@ reflective lookup.
 - **No reflection at runtime** — the Quarkus deployment processor generates
   a concrete `Mediator` implementation per scope.
 
-Status: **experimental** (`1.0.0-SNAPSHOT`).
+Status: **experimental** (`1.0.0`).
+
+[![Release](https://jitpack.io/v/mushtu/quarkus-mediator.svg)](https://jitpack.io/#mushtu/quarkus-mediator)
 
 ---
 
@@ -26,31 +28,44 @@ Status: **experimental** (`1.0.0-SNAPSHOT`).
 
 ## Installation
 
-The library is not yet published to Maven Central, so you have two options.
+Released via [JitPack](https://jitpack.io). Add the JitPack repository and
+the runtime artifact to your Quarkus app's `pom.xml` — Quarkus discovers
+the matching deployment artifact automatically via
+`META-INF/quarkus-extension.properties`.
 
-### Option A — build from source
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>com.github.mushtu.quarkus-mediator</groupId>
+    <artifactId>quarkus-mediator</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+Gradle:
+
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.mushtu.quarkus-mediator:quarkus-mediator:1.0.0'
+}
+```
+
+### Building from source
 
 ```bash
 git clone https://github.com/mushtu/quarkus-mediator.git
 cd quarkus-mediator
 mvn -pl runtime,deployment -am install -DskipTests
-```
-
-That installs `quarkus-mediator` (runtime) and `quarkus-mediator-deployment`
-into your local `~/.m2` repository.
-
-### Option B — depend on it in your Quarkus app
-
-Add the runtime artifact to your app's `pom.xml`. Quarkus discovers the
-matching deployment artifact automatically via
-`META-INF/quarkus-extension.properties`.
-
-```xml
-<dependency>
-    <groupId>com.tiddev.quarkus</groupId>
-    <artifactId>quarkus-mediator</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-</dependency>
 ```
 
 ---

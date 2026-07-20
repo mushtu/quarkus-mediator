@@ -1,0 +1,5 @@
+jdk:
+  - openjdk17
+
+install:
+  - mvn -pl runtime,deployment -am install -DskipTests
